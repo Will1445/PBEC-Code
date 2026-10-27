@@ -3,3 +3,7 @@
 /pwr_toangle.pkl
 /angle_list.txt
 /Logs/*
+*.csv
+*.png
+*.txt
+*.pyc

@@ -217,7 +217,8 @@ def power_scan(p_list, components, pca=np.nan):
     """
     time_stamps = []
     components['wheel'].reset()
-    for pwr in tqdm(p_list, leave=True):
+    #for pwr in tqdm(p_list, leave=True):
+    for pwr in p_list:
         # Reset
         components['laser'].set(pwr)
         logging.info(f'PCA: {pca}')

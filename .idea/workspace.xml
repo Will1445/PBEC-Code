@@ -5,13 +5,33 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="f83b769d-dfb0-4914-a75a-804944d3bc6f" name="Changes" comment="Working power length loop with all mixed works 100%% has posistion and working power all done">
+      <change afterPath="$PROJECT_DIR$/20250618-Camera-g1.ipynb" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/20250625-G2_control_script.ipynb" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/20251001g2.ipynb" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Camera_mask_test/CameraUSB3.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Camera_mask_test/camera_mask_test.ipynb" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Coherence_Acquisition.ipynb" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/HydraHarp_T3.ipynb" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/HydraHarp_acq_function.ipynb" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Measurement_functions.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/PS_thermalisation.ipynb" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/PS_thermalisation_gain_saturation_checked.ipynb" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Pico_Coherence_Acquisition_Mk2.ipynb" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Pico_Coherence_Acquisition_Mk3.ipynb" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Picoscope_Acquisition.ipynb" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Power_g1_scan.ipynb" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Scope Analysis.ipynb" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/T3_test.ipynb" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/correlator_test.ipynb" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/g1_g2_simultaneous.ipynb" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/PBec Experimental Code.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/PBec Experimental Code.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Coherence_scan.ipynb" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Coherence_test.ipynb" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/Components.py" beforeDir="false" afterPath="$PROJECT_DIR$/Components.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Measure.py" beforeDir="false" afterPath="$PROJECT_DIR$/Measure.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/power_lengthV5.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/power_lengthV5.ipynb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/thermal_fit_single.py" beforeDir="false" afterPath="$PROJECT_DIR$/thermal_fit_single.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -21,8 +41,8 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="Jupyter Notebook" />
         <option value="Python Script" />
+        <option value="Jupyter Notebook" />
       </list>
     </option>
   </component>
@@ -48,7 +68,9 @@
   &quot;associatedIndex&quot;: 6
 }</component>
   <component name="ProjectId" id="2jePmQcBI6h5qgeGPI2mZs279R3" />
-  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+    <ConfirmationsSetting value="1" id="Add" />
+  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
@@ -56,17 +78,23 @@
   <component name="PropertiesComponent">{
   &quot;keyToString&quot;: {
     &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
+    &quot;Python.1111.executor&quot;: &quot;Run&quot;,
     &quot;Python.Laser_gui.executor&quot;: &quot;Run&quot;,
     &quot;Python.Power_calibv2.executor&quot;: &quot;Run&quot;,
+    &quot;Python.Zscan.executor&quot;: &quot;Run&quot;,
+    &quot;Python.data_analyse.executor&quot;: &quot;Run&quot;,
+    &quot;Python.histomode.executor&quot;: &quot;Run&quot;,
     &quot;Python.power_lengthV5.1.executor&quot;: &quot;Run&quot;,
     &quot;Python.power_length_disp.executor&quot;: &quot;Run&quot;,
     &quot;Python.thermal_fit_single.executor&quot;: &quot;Run&quot;,
+    &quot;Python.tttrmode.executor&quot;: &quot;Run&quot;,
     &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
     &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
     &quot;git-widget-placeholder&quot;: &quot;master&quot;,
     &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Control&quot;,
+    &quot;last_opened_file_path&quot;: &quot;D:/Experiments/Semiconductor Cavity/Pbec_Experimental_Code/2026&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
@@ -76,7 +104,15 @@
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
 }</component>
-  <component name="RunManager" selected="Python.power_length_disp">
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\Experiments\Semiconductor Cavity\Pbec_Experimental_Code\2026" />
+      <recent name="D:\Experiments\Semiconductor Cavity\Pbec_Experimental_Code\Summer2026" />
+      <recent name="D:\Experiments\Semiconductor Cavity\Pbec_Experimental_Code\Example codes for lab equipments" />
+      <recent name="D:\Experiments\Semiconductor Cavity\Pbec_Experimental_Code" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Python.data_analyse">
     <configuration name="Laser_gui" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="PBec Experimental Code" />
       <option name="ENV_FILES" value="" />
@@ -146,7 +182,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="power_lengthV5.1" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="data_analyse" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="PBec Experimental Code" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -155,14 +191,14 @@
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Summer2026" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/power_lengthV5.1.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Summer2026/data_analyse.py" />
       <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="SHOW_COMMAND_LINE" value="true" />
       <option name="EMULATE_TERMINAL" value="false" />
       <option name="MODULE_MODE" value="false" />
       <option name="REDIRECT_INPUT" value="false" />
@@ -216,26 +252,27 @@
       <method v="2" />
     </configuration>
     <list>
-      <item itemvalue="Python.power_length_disp" />
       <item itemvalue="Python.Laser_gui" />
       <item itemvalue="Python.Power_calibv2" />
-      <item itemvalue="Python.power_lengthV5.1" />
+      <item itemvalue="Python.data_analyse" />
+      <item itemvalue="Python.power_length_disp" />
       <item itemvalue="Python.thermal_fit_single" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.data_analyse" />
         <item itemvalue="Python.power_length_disp" />
         <item itemvalue="Python.thermal_fit_single" />
         <item itemvalue="Python.Power_calibv2" />
         <item itemvalue="Python.Laser_gui" />
-        <item itemvalue="Python.power_lengthV5.1" />
       </list>
     </recent_temporary>
   </component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-python-sdk-5a2391486177-2887949eec09-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-233.13763.11" />
+        <option value="bundled-js-predefined-d6986cc7102b-1632447f56bf-JavaScript-PY-243.26574.109" />
+        <option value="bundled-python-sdk-63635adfcd5c-4df51de95216-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-243.26574.109" />
       </set>
     </attachedChunks>
   </component>
@@ -274,6 +311,194 @@
       <workItem from="1724168760865" duration="15435000" />
       <workItem from="1724251526433" duration="2304000" />
       <workItem from="1724255110778" duration="371000" />
+      <workItem from="1724858814778" duration="19833000" />
+      <workItem from="1725273885471" duration="7593000" />
+      <workItem from="1725358362112" duration="20992000" />
+      <workItem from="1725529317028" duration="7076000" />
+      <workItem from="1726045430502" duration="18151000" />
+      <workItem from="1726480445952" duration="18433000" />
+      <workItem from="1726659000395" duration="20504000" />
+      <workItem from="1727101352958" duration="5376000" />
+      <workItem from="1727189303128" duration="2446000" />
+      <workItem from="1727254920812" duration="14112000" />
+      <workItem from="1727343576224" duration="5511000" />
+      <workItem from="1727796234450" duration="60116000" />
+      <workItem from="1728392963717" duration="6916000" />
+      <workItem from="1728490850203" duration="9927000" />
+      <workItem from="1728897149976" duration="6451000" />
+      <workItem from="1728989204132" duration="9389000" />
+      <workItem from="1729159639660" duration="9658000" />
+      <workItem from="1729268734456" duration="13969000" />
+      <workItem from="1729590621065" duration="1329000" />
+      <workItem from="1729673828232" duration="12301000" />
+      <workItem from="1730112086987" duration="10856000" />
+      <workItem from="1730283557424" duration="1788000" />
+      <workItem from="1730293524832" duration="13051000" />
+      <workItem from="1730461659962" duration="6383000" />
+      <workItem from="1730804125343" duration="3859000" />
+      <workItem from="1730887218872" duration="16965000" />
+      <workItem from="1731504118520" duration="951000" />
+      <workItem from="1731506822268" duration="4711000" />
+      <workItem from="1731585020643" duration="12206000" />
+      <workItem from="1732097051869" duration="6485000" />
+      <workItem from="1732184518963" duration="10852000" />
+      <workItem from="1732283193681" duration="4398000" />
+      <workItem from="1732804849908" duration="7765000" />
+      <workItem from="1733134864414" duration="20477000" />
+      <workItem from="1733225526620" duration="12038000" />
+      <workItem from="1733481147248" duration="32049000" />
+      <workItem from="1733925150310" duration="5949000" />
+      <workItem from="1733996541869" duration="3324000" />
+      <workItem from="1734086487506" duration="5475000" />
+      <workItem from="1736336187371" duration="17866000" />
+      <workItem from="1736435846336" duration="1954000" />
+      <workItem from="1736765688288" duration="7556000" />
+      <workItem from="1736941632836" duration="12139000" />
+      <workItem from="1737974669937" duration="19640000" />
+      <workItem from="1739354888941" duration="19997000" />
+      <workItem from="1739527944320" duration="6607000" />
+      <workItem from="1739790408084" duration="27748000" />
+      <workItem from="1740152650545" duration="96186000" />
+      <workItem from="1741864709551" duration="24166000" />
+      <workItem from="1742227673545" duration="2730000" />
+      <workItem from="1742471319724" duration="6069000" />
+      <workItem from="1742984254429" duration="7823000" />
+      <workItem from="1743000347736" duration="82000" />
+      <workItem from="1743000970781" duration="3649000" />
+      <workItem from="1743079718767" duration="3687000" />
+      <workItem from="1743093814075" duration="5995000" />
+      <workItem from="1743177179785" duration="6577000" />
+      <workItem from="1743415391943" duration="4281000" />
+      <workItem from="1743427674849" duration="8555000" />
+      <workItem from="1743585294515" duration="844000" />
+      <workItem from="1743688662983" duration="2852000" />
+      <workItem from="1744018224449" duration="623000" />
+      <workItem from="1744196444108" duration="692000" />
+      <workItem from="1744280331365" duration="625000" />
+      <workItem from="1744640797971" duration="619000" />
+      <workItem from="1745851072446" duration="13009000" />
+      <workItem from="1747057858694" duration="5942000" />
+      <workItem from="1747664480665" duration="4530000" />
+      <workItem from="1747734245963" duration="2183000" />
+      <workItem from="1749126027978" duration="2615000" />
+      <workItem from="1749203204903" duration="3241000" />
+      <workItem from="1749734151137" duration="6868000" />
+      <workItem from="1749743046630" duration="1123000" />
+      <workItem from="1750067606513" duration="14059000" />
+      <workItem from="1750239629312" duration="27381000" />
+      <workItem from="1750855891088" duration="19768000" />
+      <workItem from="1750942533605" duration="23778000" />
+      <workItem from="1751276476178" duration="18877000" />
+      <workItem from="1751465491871" duration="8453000" />
+      <workItem from="1751880842747" duration="20366000" />
+      <workItem from="1752143952882" duration="1856000" />
+      <workItem from="1752500557799" duration="8295000" />
+      <workItem from="1752678892731" duration="29337000" />
+      <workItem from="1753110801789" duration="4577000" />
+      <workItem from="1753177732866" duration="6638000" />
+      <workItem from="1753190273618" duration="6426000" />
+      <workItem from="1753793150553" duration="28000" />
+      <workItem from="1753793247314" duration="389000" />
+      <workItem from="1753796210976" duration="171000" />
+      <workItem from="1753797395864" duration="2803000" />
+      <workItem from="1753869769892" duration="12332000" />
+      <workItem from="1753969276702" duration="5375000" />
+      <workItem from="1754043389856" duration="3849000" />
+      <workItem from="1755258179298" duration="604000" />
+      <workItem from="1756472045530" duration="6675000" />
+      <workItem from="1756721734198" duration="13971000" />
+      <workItem from="1756991316139" duration="7874000" />
+      <workItem from="1757587648366" duration="9369000" />
+      <workItem from="1757927912637" duration="12367000" />
+      <workItem from="1758036704744" duration="1651000" />
+      <workItem from="1758117957519" duration="3759000" />
+      <workItem from="1758622669571" duration="8990000" />
+      <workItem from="1758721979708" duration="3904000" />
+      <workItem from="1758793337816" duration="3707000" />
+      <workItem from="1758812514088" duration="3779000" />
+      <workItem from="1759136997528" duration="14038000" />
+      <workItem from="1759402489243" duration="15322000" />
+      <workItem from="1759755916441" duration="11909000" />
+      <workItem from="1760002084006" duration="15122000" />
+      <workItem from="1760362907339" duration="8764000" />
+      <workItem from="1760612346639" duration="9309000" />
+      <workItem from="1760964961253" duration="6236000" />
+      <workItem from="1762789450059" duration="3396000" />
+      <workItem from="1763647392550" duration="5317000" />
+      <workItem from="1763983896982" duration="5123000" />
+      <workItem from="1764600959283" duration="18723000" />
+      <workItem from="1766151688749" duration="3233000" />
+      <workItem from="1770041164847" duration="5676000" />
+      <workItem from="1770301256958" duration="12483000" />
+      <workItem from="1770654519411" duration="1301000" />
+      <workItem from="1770894034108" duration="1610000" />
+      <workItem from="1771250902524" duration="733000" />
+      <workItem from="1771251659668" duration="7850000" />
+      <workItem from="1777464422348" duration="1380000" />
+      <workItem from="1781182295000" duration="6012000" />
+      <workItem from="1781515465435" duration="13531000" />
+      <workItem from="1781534580004" duration="47000" />
+      <workItem from="1781787515111" duration="9756000" />
+      <workItem from="1781873016027" duration="22898000" />
+      <workItem from="1782470927886" duration="3502000" />
+      <workItem from="1782476343334" duration="462000" />
+      <workItem from="1782477221867" duration="6192000" />
+      <workItem from="1782727355461" duration="4918000" />
+      <workItem from="1782740324181" duration="5817000" />
+      <workItem from="1782986002583" duration="1432000" />
+      <workItem from="1782987462286" duration="342000" />
+      <workItem from="1782987852339" duration="105000" />
+      <workItem from="1782988158475" duration="6822000" />
+      <workItem from="1783080535508" duration="69000" />
+      <workItem from="1783080647515" duration="1008000" />
+      <workItem from="1783085785831" duration="4881000" />
+      <workItem from="1783091330847" duration="472000" />
+      <workItem from="1783092543735" duration="170000" />
+      <workItem from="1783328567618" duration="4875000" />
+      <workItem from="1783342152367" duration="1688000" />
+      <workItem from="1783344556594" duration="17359000" />
+      <workItem from="1784109990160" duration="482000" />
+      <workItem from="1784209112583" duration="3794000" />
+      <workItem from="1784292388884" duration="9929000" />
+      <workItem from="1784543069249" duration="12434000" />
+      <workItem from="1784627602271" duration="13709000" />
+      <workItem from="1784717524203" duration="18206000" />
+      <workItem from="1784806038748" duration="8000" />
+      <workItem from="1785146347997" duration="13285000" />
+      <workItem from="1785232786659" duration="24410000" />
+      <workItem from="1785320690912" duration="10005000" />
+      <workItem from="1785427307950" duration="9738000" />
+      <workItem from="1785495330343" duration="18194000" />
+      <workItem from="1785516227183" duration="2585000" />
+      <workItem from="1785748719340" duration="7627000" />
+      <workItem from="1785836918106" duration="10762000" />
+      <workItem from="1785925588039" duration="20167000" />
+      <workItem from="1786104735218" duration="7646000" />
+      <workItem from="1786118067270" duration="4886000" />
+      <workItem from="1786363375620" duration="32524000" />
+      <workItem from="1786630754479" duration="27000" />
+      <workItem from="1786712801007" duration="19306000" />
+      <workItem from="1787044348919" duration="10947000" />
+      <workItem from="1787217926679" duration="3686000" />
+      <workItem from="1787222664312" duration="11046000" />
+      <workItem from="1787325230579" duration="263000" />
+      <workItem from="1787325924662" duration="14435000" />
+      <workItem from="1787665622223" duration="20841000" />
+      <workItem from="1788018390225" duration="660000" />
+      <workItem from="1788019089920" duration="32616000" />
+      <workItem from="1789382391299" duration="2046000" />
+      <workItem from="1789393255772" duration="2024000" />
+      <workItem from="1789395315116" duration="84000" />
+      <workItem from="1789395551764" duration="5617000" />
+      <workItem from="1789553811322" duration="2433000" />
+      <workItem from="1789986573801" duration="3330000" />
+      <workItem from="1790603677439" duration="269000" />
+      <workItem from="1790603965079" duration="5179000" />
+      <workItem from="1791983111919" duration="692000" />
+      <workItem from="1792417323301" duration="8196000" />
+      <workItem from="1792426148324" duration="6000" />
+      <workItem from="1792584104561" duration="9400000" />
+      <workItem from="1793099048738" duration="188000" />
     </task>
     <task id="LOCAL-00001" summary="Updates - works now">
       <option name="closed" value="true" />
@@ -344,34 +569,34 @@
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/Measure.py</url>
-          <line>107</line>
-          <option name="timeStamp" value="10" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/Components.py</url>
-          <line>378</line>
+          <line>407</line>
           <option name="timeStamp" value="21" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/Components.py</url>
-          <line>377</line>
+          <line>406</line>
           <option name="timeStamp" value="22" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/Components.py</url>
-          <line>375</line>
+          <line>404</line>
           <option name="timeStamp" value="23" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/Components.py</url>
-          <line>423</line>
+          <line>452</line>
           <option name="timeStamp" value="29" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/Components.py</url>
-          <line>417</line>
+          <line>446</line>
           <option name="timeStamp" value="30" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="jupyter-line">
+          <url>file://$PROJECT_DIR$/20250625-G2_control_script.ipynb</url>
+          <line>114</line>
+          <option name="timeStamp" value="31" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

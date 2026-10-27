@@ -30,6 +30,15 @@ from pbec_analysis import make_timestamp, SpectrometerData, ExperimentalDataSet,
 #Create the metaparams dictionary
 params = dict()
 
+def get_spectrum_measure(port, host, int_time=10, n_averages=1, n_measures=1):
+	if not n_measures >=1:
+		raise Exception("*** Error: Invalid number of measures ***")
+	pbec_ipc.ipc_exec("get_single_spectrum("+str(int_time)+','+str(n_averages)+','+str(n_measures)+')', port=port, host=host)
+	spectrum_time_label = pbec_ipc.ipc_get_array("s.spectro.spectrum_time_label", port=port, host=host)
+	spectrum_new_data_flag = pbec_ipc.ipc_get_array("s.spectro.spectrum_new_data_flag", port=port, host=host)
+	lamb = pbec_ipc.ipc_get_array("s.spectro.lamb", port=port, host=host)
+	spectrum = pbec_ipc.ipc_get_array("s.spectro.spectrum", port=port, host=host)
+	return spectrum_time_label, spectrum_new_data_flag, lamb, spectrum
 
 def update_dataset(dataset):
     """Add the current parameters dictionary to the dataset object
@@ -108,7 +117,12 @@ class Thor_PowerMeter(PowerMeter):
         logging.info('{}_meter_reading'.format(self.label), reading * 1000)
         return reading
 
-
+    def change_power_range(self, range):
+        '''
+        Changes power meter range
+        :return: range
+        '''
+        
 
 class Grandaddy_PowerMeter(PowerMeter):
     def __init__(self, num_power_readings=100, bs_factor=1, wavelength=950, measure=True, label=False):
@@ -239,7 +253,7 @@ class Spectrometer(GenericSpectrometer):
     """
 
     def __init__(self, spectrometer_server_port=pbec_ipc.PORT_NUMBERS["spectrometer_server V2"],
-                 spectrometer_server_host='localhost', max_count_rate=10000, min_int_time=2, spec_nd=1 / 7,
+                 spectrometer_server_host='localhost', max_count_rate=10000, min_int_time=2, spec_nd=1,
                  total_time=100, initial_time=1000,
                  measure=True, min_lamb=910
 
@@ -255,7 +269,7 @@ class Spectrometer(GenericSpectrometer):
             initial_time (int, optional): Initial integration time. Note can be greater than total time, allowing for collection of low intensity of data, whilst limiting 
             the number of measurements for high intensity data, resulting in a speedup. Defaults to 1000.
         """                 
-        super.__init__(max_count_rate, spec_nd, measure, min_lamb)
+        super().__init__(max_count_rate, spec_nd, measure, min_lamb)
         
         from single_spec_IPC_module import get_spectrum_measure
         self.spectrometer_server_port = spectrometer_server_port
@@ -314,12 +328,27 @@ class FilterWheel():
         self.measure = False
         params.update({'nd_filter': 0})
 
+    def set(self,position):
+        self.filter_wheel.set_position(position)
+        params.update({'nd_filter': position})
     def increase_filter(self):
 
         filter_pos = self.filter_wheel.get_position()
         if filter_pos == max(self.allowed_filter_positions):
             winsound.Beep(1000, 1000)
             raise Exception('Max ND filter reached')
+        else:
+            self.filter_wheel.set_position(self.allowed_filter_positions[self.current_pos_index + 1])
+            self.current_pos_index = self.current_pos_index + 1
+            time.sleep(5)
+            params.update({'nd_filter': self.allowed_filter_positions[self.current_pos_index]})
+
+    def increase_filter_nolimit(self):
+        filter_pos = self.filter_wheel.get_position()
+        if filter_pos == max(self.allowed_filter_positions):
+            self.filter_wheel.set_position(0)
+            winsound.Beep(1000, 1000)
+            self.current_pos_index = 0
         else:
             self.filter_wheel.set_position(self.allowed_filter_positions[self.current_pos_index + 1])
             self.current_pos_index = self.current_pos_index + 1
@@ -569,20 +598,36 @@ class Thor_Camera(Camera):
 
     def get_exposure(self):
         return self.camera.exposure_time_us
-    
+
     def get_image(self):
+
+        # self.camera.issue_software_trigger()
+        # frame = self.tlc.get_pending_frame_or_null(self.camera)
+        #
+        # image_data = frame.image_buffer
+        # time.sleep(1)
+        # return image_data*(255/1023)
         self.camera.issue_software_trigger()
-        frame = self.tlc.get_pending_frame_or_null(self.camera)
-        image_data = frame.image_buffer
+        # Try for a frame for up to 1 second in small steps
+        for _ in range(10):
+            frame = self.tlc.get_pending_frame_or_null(self.camera)
+            if frame is not None:
+                image_data = frame.image_buffer
+                return image_data * (255 / 1023)
+            time.sleep(0.3)
 
-        return image_data*(255/1023)
+        # If no frame is received
+        print("Warning: No frame received from camera.")
+        return None
 
-    def get_multiple_images(self, num=10):
+    def get_multiple_images(self, num=10, timesleep = 0.1):
         # Return as a list
         images = []
         for k in range(num):
             images.append(self.get_image())
+            time.sleep(timesleep)
         return images
+
 
     def begin_acquisition(self):
         self.tlc.arm(self.camera,50)
@@ -655,7 +700,7 @@ class Translation_Stage():
 
 class Toptica_Laser():
     '''Laser class compatible with Toptica_Laser'''
-    def __init__(self, com_port='COM15'):
+    def __init__(self, com_port='COM5'):
         """
 
         Args:
@@ -670,6 +715,13 @@ class Toptica_Laser():
         """Set and saves laser power.
         """
         self.laser.set_channel_power(1, power)
+        self.power = power
+        params.update({'power': self.power * 1000})
+
+    def set2(self, power):
+        """Set and saves laser power.
+        """
+        self.laser.set_channel_power(2, power)
         self.power = power
         params.update({'power': self.power * 1000})
 
@@ -691,3 +743,93 @@ class HWP_Laser():
         self.motor.move_to(self.power_toangle(self.power))
         time.sleep(1)
         params.update({'power': self.power * 1000})
+
+import ctypes
+import numpy as np
+from picosdk.ps6000 import ps6000 as ps
+from picosdk.functions import adc2mV, assert_pico_ok
+from ctypes import c_int16, c_int32, byref, c_char_p
+
+class Picoscope:
+    def __init__(self):
+        self.status = {}
+        self.chandle = c_int16()
+        serial = c_char_p()  # Leave serial empty for single device
+        self.status["openunit"] = ps.ps6000OpenUnit(byref(self.chandle), serial)
+        assert self.status["openunit"] == 0, f"Failed to open PicoScope 6407, error code: {self.status['openunit']}"
+
+    def set_channel(self, ch):
+        # Set the channel based on the input parameter
+        channels = {
+            0: 'PS6000_CHANNEL_A',
+            1: 'PS6000_CHANNEL_B',
+            2: 'PS6000_CHANNEL_C',
+            3: 'PS6000_CHANNEL_D'
+        }
+
+        if ch not in channels:
+            raise ValueError("Channel must be 0, 1, 2, or 3.")
+
+        self.channel = ps.PS6000_CHANNEL[channels[ch]]
+        enabled = 1  # True
+        coupling_type = ps.PS6000_COUPLING['PS6000_DC_50R']  # DC coupling with 50 ohm impedance
+        chARange = ps.PS6000_RANGE['PS6000_100MV']  # ±100 mV range
+        analogue_offset = 0  # Default offset
+        bandwidth = ps.PS6000_BANDWIDTH_LIMITER['PS6000_BW_FULL']  # Full bandwidth
+
+        self.status["set_channel"] = ps.ps6000SetChannel(self.chandle, self.channel, enabled, coupling_type, chARange, analogue_offset, bandwidth)
+        assert self.status["set_channel"] == 0, f"Error in setting channel: {self.status['set_channel']}"
+
+    def set_trigger(self, enabled, source, threshold, direction, delay, autoTrigger_ms):
+        self.status["trigger"] = ps.ps6000SetSimpleTrigger(self.chandle, enabled, source, threshold, direction, delay, autoTrigger_ms)
+        assert_pico_ok(self.status["trigger"])
+
+    def set_timebase(self, preTriggerSamples, postTriggerSamples, timebase):
+        maxSamples = preTriggerSamples + postTriggerSamples
+
+        # Get timebase information
+        timeIntervalns = ctypes.c_float()
+        returnedMaxSamples = ctypes.c_int32()
+        self.status["getTimebase2"] = ps.ps6000GetTimebase2(self.chandle, timebase, maxSamples, byref(timeIntervalns), 1, byref(returnedMaxSamples), 0)
+        assert_pico_ok(self.status["getTimebase2"])
+
+        return timeIntervalns.value, maxSamples  # Return the time interval and max samples for further use
+
+    def get_data(self, preTriggerSamples, postTriggerSamples, timebase):
+        maxSamples = preTriggerSamples + postTriggerSamples
+
+        # Run block capture
+        self.status["runBlock"] = ps.ps6000RunBlock(self.chandle, preTriggerSamples, postTriggerSamples, timebase, 0, None, 0, None, None)
+        assert_pico_ok(self.status["runBlock"])
+
+        # Check for data collection to finish using ps6000IsReady
+        ready = ctypes.c_int16(0)
+        check = ctypes.c_int16(0)
+        while ready.value == check.value:
+            self.status["isReady"] = ps.ps6000IsReady(self.chandle, ctypes.byref(ready))
+
+        # Create buffers for data collection
+        bufferAMax = (ctypes.c_int16 * maxSamples)()
+        bufferAMin = (ctypes.c_int16 * maxSamples)()  # Used for downsampling
+
+        # Set data buffer location for data collection from channel A
+        self.status["setDataBuffersA"] = ps.ps6000SetDataBuffers(self.chandle, 0, byref(bufferAMax), byref(bufferAMin), maxSamples, 0)
+        assert_pico_ok(self.status["setDataBuffersA"])
+
+        # Create overflow location
+        overflow = ctypes.c_int16()
+        cmaxSamples = ctypes.c_int32(maxSamples)
+
+        # Retrieve data from scope to buffers assigned above
+        self.status["getValues"] = ps.ps6000GetValues(self.chandle, 0, byref(cmaxSamples), 1, 0, 0, byref(overflow))
+        assert_pico_ok(self.status["getValues"])
+
+        # Find maximum ADC count value and convert ADC counts data to mV
+        maxADC = ctypes.c_int16(32512)
+        adc2mVChAMax = adc2mV(bufferAMax, ps.PS6000_RANGE['PS6000_100MV'], maxADC)
+
+        # Create time data
+        timeIntervalns = ctypes.c_float()  # Initialize timeIntervalns to ensure it's defined
+        time = np.linspace(0, (cmaxSamples.value - 1) * timeIntervalns.value, cmaxSamples.value)
+
+        return time, adc2mVChAMax  # Return time and voltage data for further processing
