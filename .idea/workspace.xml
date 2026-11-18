@@ -5,33 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="f83b769d-dfb0-4914-a75a-804944d3bc6f" name="Changes" comment="Working power length loop with all mixed works 100%% has posistion and working power all done">
-      <change afterPath="$PROJECT_DIR$/20250618-Camera-g1.ipynb" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/20250625-G2_control_script.ipynb" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/20251001g2.ipynb" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Camera_mask_test/CameraUSB3.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Camera_mask_test/camera_mask_test.ipynb" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Coherence_Acquisition.ipynb" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/HydraHarp_T3.ipynb" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/HydraHarp_acq_function.ipynb" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Measurement_functions.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/PS_thermalisation.ipynb" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/PS_thermalisation_gain_saturation_checked.ipynb" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Pico_Coherence_Acquisition_Mk2.ipynb" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Pico_Coherence_Acquisition_Mk3.ipynb" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Picoscope_Acquisition.ipynb" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Power_g1_scan.ipynb" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Scope Analysis.ipynb" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/T3_test.ipynb" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/correlator_test.ipynb" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/g1_g2_simultaneous.ipynb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/PBec Experimental Code.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/PBec Experimental Code.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Coherence_scan.ipynb" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Coherence_test.ipynb" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Components.py" beforeDir="false" afterPath="$PROJECT_DIR$/Components.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Measure.py" beforeDir="false" afterPath="$PROJECT_DIR$/Measure.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/power_lengthV5.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/power_lengthV5.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/2026/powerinpowerout.ipynb" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/2026/quick power ramp.ipynb" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -75,41 +52,45 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
-    &quot;Python.1111.executor&quot;: &quot;Run&quot;,
-    &quot;Python.Laser_gui.executor&quot;: &quot;Run&quot;,
-    &quot;Python.Power_calibv2.executor&quot;: &quot;Run&quot;,
-    &quot;Python.Zscan.executor&quot;: &quot;Run&quot;,
-    &quot;Python.data_analyse.executor&quot;: &quot;Run&quot;,
-    &quot;Python.histomode.executor&quot;: &quot;Run&quot;,
-    &quot;Python.power_lengthV5.1.executor&quot;: &quot;Run&quot;,
-    &quot;Python.power_length_disp.executor&quot;: &quot;Run&quot;,
-    &quot;Python.thermal_fit_single.executor&quot;: &quot;Run&quot;,
-    &quot;Python.tttrmode.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
-    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;D:/Experiments/Semiconductor Cavity/Pbec_Experimental_Code/2026&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;org.jetbrains.plugins.notebooks.jupyter.connections.configuration.JupyterServerConfigurable&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ASKED_ADD_EXTERNAL_FILES": "true",
+    "Python.1111.executor": "Run",
+    "Python.Laser_gui.executor": "Run",
+    "Python.Power_calibv2.executor": "Run",
+    "Python.Zscan.executor": "Run",
+    "Python.data_analyse.executor": "Run",
+    "Python.histomode.executor": "Run",
+    "Python.power_lengthV5.1.executor": "Run",
+    "Python.power_length_disp.executor": "Run",
+    "Python.thermal_fit_single.executor": "Run",
+    "Python.tttrmode.executor": "Run",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "git-widget-placeholder": "master",
+    "ignore.virus.scanning.warn.message": "true",
+    "last_opened_file_path": "D:/Experiments/Semiconductor Cavity/Pbec_Experimental_Code/2627_C&R/Lab 3",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "org.jetbrains.plugins.notebooks.jupyter.connections.configuration.JupyterServerConfigurable",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\Experiments\Semiconductor Cavity\Pbec_Experimental_Code\2627_C&amp;R\Lab 3" />
       <recent name="D:\Experiments\Semiconductor Cavity\Pbec_Experimental_Code\2026" />
       <recent name="D:\Experiments\Semiconductor Cavity\Pbec_Experimental_Code\Summer2026" />
       <recent name="D:\Experiments\Semiconductor Cavity\Pbec_Experimental_Code\Example codes for lab equipments" />
       <recent name="D:\Experiments\Semiconductor Cavity\Pbec_Experimental_Code" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\Experiments\Semiconductor Cavity\Pbec_Experimental_Code\2026W&amp;Y" />
     </key>
   </component>
   <component name="RunManager" selected="Python.data_analyse">
@@ -499,6 +480,10 @@
       <workItem from="1792426148324" duration="6000" />
       <workItem from="1792584104561" duration="9400000" />
       <workItem from="1793099048738" duration="188000" />
+      <workItem from="1793614909010" duration="3418000" />
+      <workItem from="1793632915300" duration="5053000" />
+      <workItem from="1794232954204" duration="8819000" />
+      <workItem from="1794406092823" duration="9275000" />
     </task>
     <task id="LOCAL-00001" summary="Updates - works now">
       <option name="closed" value="true" />
