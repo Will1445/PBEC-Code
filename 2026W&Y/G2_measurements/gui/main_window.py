@@ -172,14 +172,6 @@ class MainWindow(QMainWindow):
         panel = QWidget()
         layout = QVBoxLayout(panel)
         layout.setContentsMargins(5, 0, 0, 0)
-        test_mode = QLabel(
-            "HYDRAHARP-ONLY TEST MODE — laser remains untouched; power values are labels only."
-        )
-        test_mode.setWordWrap(True)
-        test_mode.setStyleSheet(
-            "background: #fff3cd; color: #765600; border-radius: 6px; padding: 8px; font-weight: 600"
-        )
-        layout.addWidget(test_mode)
         layout.addWidget(self._current_measurement())
         layout.addWidget(self._output_directory_panel())
         layout.addStretch(1)
@@ -234,11 +226,11 @@ class MainWindow(QMainWindow):
         plots.setChildrenCollapsible(False)
         peak_box = QGroupBox("Peak height vs power")
         peak_layout = QVBoxLayout(peak_box)
-        self.peak_plot = AnalysisPlot("", "Requested power setpoint (mW)", "g²(τ₀)")
+        self.peak_plot = AnalysisPlot("", "Laser power (mW)", "g²(τ₀)")
         peak_layout.addWidget(self.peak_plot)
         width_box = QGroupBox("Peak width vs power")
         width_layout = QVBoxLayout(width_box)
-        self.width_plot = AnalysisPlot("", "Requested power setpoint (mW)", "Width (ns)")
+        self.width_plot = AnalysisPlot("", "Laser power (mW)", "Width (ns)")
         width_layout.addWidget(self.width_plot)
         plots.addWidget(peak_box)
         plots.addWidget(width_box)

@@ -15,11 +15,6 @@ from measurement.analysis import fit_histogram
 from measurement.models import AcquisitionConfig
 from measurement.storage import save_histogram
 
-# Temporary hardware-test setting. Keep False while HydraHarp-only testing is
-# in progress; switch to True after testing to restore Toptica control.
-LASER_CONTROL_ENABLED = False
-
-
 class MeasurementWorker(QThread):
     """Acquire a power sweep without blocking the GUI thread."""
 
@@ -69,15 +64,12 @@ class MeasurementWorker(QThread):
                 sys.path.insert(0, str(import_path))
 
         from utils.hydraharp import HydraHarp
+        from pylablib.devices import Toptica
+
         adapter_path = sys.modules[HydraHarp.__module__].__file__
         self.log_message.emit(f"HydraHarp adapter: {adapter_path}")
         hydra = self._hydra_factory() if self._hydra_factory else HydraHarp()
-        if not LASER_CONTROL_ENABLED:
-            return hydra, None
-
         try:
-            from pylablib.devices import Toptica
-
             laser = (
                 self._laser_factory()
                 if self._laser_factory
@@ -123,14 +115,9 @@ class MeasurementWorker(QThread):
 
     def _acquire_power_point(self, hydra, laser, power_mw, nd_filter_count, point_type):
         power_w = float(power_mw) / 1000.0
-        if laser is not None:
-            laser.set_channel_power(1, power_w)
-            time.sleep(0.25)
-            self.log_message.emit(f"Set laser power to {power_mw:.4f} mW ({point_type} point)")
-        else:
-            self.log_message.emit(
-                f"Laser unchanged; recording requested setpoint {power_mw:.4f} mW ({point_type} point)"
-            )
+        laser.set_channel_power(1, power_w)
+        time.sleep(0.25)
+        self.log_message.emit(f"Set laser power to {power_mw:.4f} mW ({point_type} point)")
 
         count_rate = float(hydra.rates()["input_cps"][self.config.channel])
         while count_rate >= self.config.saturation_limit_cps:
@@ -197,7 +184,6 @@ class MeasurementWorker(QThread):
             power_w=power_w,
             wavelength_nm=self.config.wavelength_nm,
             point_type=point_type,
-            laser_controlled=laser is not None,
         )
         self.log_message.emit(f"Saved histogram: {saved_path}")
         return saved_path, nd_filter_count
@@ -208,7 +194,7 @@ class MeasurementWorker(QThread):
         success = False
         summary = "Measurement stopped."
         try:
-            self.log_message.emit("Connecting to HydraHarp…")
+            self.log_message.emit("Connecting to HydraHarp and Toptica laser…")
             hydra, laser = self._load_hardware()
             if not 0 <= self.config.channel < hydra.channels:
                 raise ValueError(
@@ -237,11 +223,6 @@ class MeasurementWorker(QThread):
                 f"Connected. Starting {len(powers_mw)} initial power points; "
                 f"collection time {self.config.collection_time_s:g} s each."
             )
-            if laser is None:
-                self.log_message.emit(
-                    "HYDRAHARP-ONLY TEST MODE: no laser driver was imported or opened; "
-                    "power values are requested setpoint labels only."
-                )
             completed_points = 0
 
             def process_saved_point(power_mw, saved_path):

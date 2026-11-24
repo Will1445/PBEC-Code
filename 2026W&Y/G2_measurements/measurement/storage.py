@@ -16,7 +16,6 @@ def save_histogram(
     power_w: float,
     wavelength_nm: int,
     point_type: str = "initial",
-    laser_controlled: bool = True,
 ) -> Path:
     """Write a histogram CSV with acquisition metadata in comment lines.
 
@@ -51,7 +50,6 @@ def save_histogram(
         stream.write(f"# power_W={power_w:.10g}\n")
         stream.write(f"# wavelength_nm={int(wavelength_nm)}\n")
         stream.write(f"# point_type={point_type}\n")
-        stream.write(f"# laser_controlled={str(bool(laser_controlled)).lower()}\n")
         stream.write("delay_ns,counts\n")
         np.savetxt(stream, np.column_stack((delays, histogram)), delimiter=",", fmt=("%.9f", "%.0f"))
     return csv_path
