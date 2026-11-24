@@ -3,6 +3,7 @@
 import os
 from pathlib import Path
 import sys
+import struct
 from threading import Event
 import time
 
@@ -56,6 +57,11 @@ class MeasurementWorker(QThread):
     def _load_hardware(self):
         if os.name != "nt":
             raise RuntimeError("The HydraHarp HHLIB interface requires Windows and the connected lab hardware.")
+        self.log_message.emit(
+            f"Python runtime: {sys.version.split()[0]}, {struct.calcsize('P') * 8}-bit, "
+            f"{sys.executable}"
+        )
+        self.log_message.emit(r"HydraHarp DLL path: D:\Control\HydraHarp\hhlib.dll")
         repo_root = Path(__file__).resolve().parents[3]
         wy_root = repo_root / "2026W&Y"
         for import_path in (repo_root, wy_root):
@@ -63,6 +69,8 @@ class MeasurementWorker(QThread):
                 sys.path.insert(0, str(import_path))
 
         from utils.hydraharp import HydraHarp
+        adapter_path = sys.modules[HydraHarp.__module__].__file__
+        self.log_message.emit(f"HydraHarp adapter: {adapter_path}")
         hydra = self._hydra_factory() if self._hydra_factory else HydraHarp()
         if not LASER_CONTROL_ENABLED:
             return hydra, None
