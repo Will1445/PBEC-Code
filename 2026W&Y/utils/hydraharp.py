@@ -9,7 +9,7 @@ import time
 
 class HydraHarp:
     def __init__(self):
-        self.lib=ct.WinDLL(r'D:\Control\HydraHarp\hhlib.dll')
+        self.lib=ct.WinDLL(r'C:\Program Files\PicoQuant\UniHarp\hhlib64.dll')
         self.device=None
         self.running=False
         defs={

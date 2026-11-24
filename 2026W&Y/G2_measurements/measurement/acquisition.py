@@ -61,7 +61,7 @@ class MeasurementWorker(QThread):
             f"Python runtime: {sys.version.split()[0]}, {struct.calcsize('P') * 8}-bit, "
             f"{sys.executable}"
         )
-        self.log_message.emit(r"HydraHarp DLL path: D:\Control\HydraHarp\hhlib.dll")
+        self.log_message.emit(r"HydraHarp DLL path: C:\Program Files\PicoQuant\UniHarp\hhlib64.dll")
         repo_root = Path(__file__).resolve().parents[3]
         wy_root = repo_root / "2026W&Y"
         for import_path in (repo_root, wy_root):

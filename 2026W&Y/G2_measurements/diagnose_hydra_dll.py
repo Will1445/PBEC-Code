@@ -9,7 +9,7 @@ import sys
 from pathlib import Path
 
 
-DLL_PATH = Path(r"D:\Control\HydraHarp\hhlib.dll")
+DLL_PATH = Path(r"C:\Program Files\PicoQuant\UniHarp\hhlib64.dll")
 MACHINE_TYPES = {
     0x014C: "x86 (32-bit)",
     0x8664: "x64 (64-bit)",
