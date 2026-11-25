@@ -151,8 +151,9 @@ class MeasurementWorker(QThread):
                 self.config.collection_time_s, count_rate,
             )
             status = result.get("status", {})
-            if status.get("warning_text"):
-                self.log_message.emit(f"HydraHarp warning: {status['warning_text']}")
+            warning_text = status.get("warning_text", "")
+            if warning_text and "WARNING_INPUT_RATE_RATIO" not in warning_text:
+                self.log_message.emit(f"HydraHarp warning: {warning_text}")
 
             if self._stop_requested.is_set():
                 break
