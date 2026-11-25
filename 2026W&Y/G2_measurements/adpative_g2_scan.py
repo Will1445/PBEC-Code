@@ -20,7 +20,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 
-DEFAULT_DATA_DIR = Path(r"D:\Data")
+DEFAULT_DATA_DIR = Path(__file__).resolve().parent / "Data"
 
 
 def parse_args():
@@ -33,7 +33,12 @@ def parse_args():
     parser.add_argument("--settling-time", type=float, default=2.0, help="Wait after setting laser power, in seconds.")
     parser.add_argument("--channel", type=int, default=0, help="HydraHarp input channel (default: 0).")
     parser.add_argument("--laser-com-port", default="COM5", help="Toptica laser serial port (default: COM5).")
-    parser.add_argument("--data-dir", type=Path, default=DEFAULT_DATA_DIR, help="Base data directory (default: D:\\Data).")
+    parser.add_argument(
+        "--data-dir",
+        type=Path,
+        default=DEFAULT_DATA_DIR,
+        help="Base data directory (default: Data folder beside this script).",
+    )
     return parser.parse_args()
 
 
