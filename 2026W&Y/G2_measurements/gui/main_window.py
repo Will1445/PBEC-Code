@@ -30,7 +30,7 @@ from PyQt6.QtWidgets import (
 )
 
 from gui.plot_widget import AnalysisPlot
-from measurement.analysis import fit_histogram, load_histogram
+from measurement.analysis import fit_histogram, load_histogram, uncertainty_outliers
 from measurement.acquisition import MeasurementWorker
 from measurement.models import AcquisitionConfig
 
@@ -373,14 +373,23 @@ class MainWindow(QMainWindow):
             return
 
         self._render_analysis_plots()
+        rejected = uncertainty_outliers(self.analysis_results)
+        if rejected:
+            names = ", ".join(result.path.name for result in rejected)
+            self.log_message(
+                f"Excluded {len(rejected)} measurement(s) from analysis plots because "
+                f"fit uncertainty exceeded 3× the median: {names}"
+            )
         if failures:
             self.log_message(f"Analysis fitted {len(results)} file(s); skipped {len(failures)} file(s).")
         else:
             self.log_message(f"Analysis fitted {len(results)} saved measurement(s).")
 
     def _render_analysis_plots(self):
-        initial = [result for result in self.analysis_results if result.point_type != "adaptive"]
-        adaptive = [result for result in self.analysis_results if result.point_type == "adaptive"]
+        rejected = set(uncertainty_outliers(self.analysis_results))
+        plot_results = [result for result in self.analysis_results if result not in rejected]
+        initial = [result for result in plot_results if result.point_type != "adaptive"]
+        adaptive = [result for result in plot_results if result.point_type == "adaptive"]
         pending = self.pending_adaptive_powers_mw
 
         self.peak_plot.show_measurement_series(

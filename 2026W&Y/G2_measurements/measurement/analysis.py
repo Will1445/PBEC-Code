@@ -26,6 +26,33 @@ class HistogramFit:
     point_type: str
 
 
+def uncertainty_outliers(results, *, factor: float = 3.0):
+    """Return fits whose height or width uncertainty is a large outlier.
+
+    A comparison needs at least three fitted measurements. Each uncertainty is
+    compared with the median for that same quantity, so the differently scaled
+    height and width errors are never compared with each other.
+    """
+    results = list(results)
+    if len(results) < 3:
+        return []
+
+    errors = (
+        np.asarray([result.peak_height_error for result in results], dtype=float),
+        np.asarray([result.width_error_ns for result in results], dtype=float),
+    )
+    rejected = np.zeros(len(results), dtype=bool)
+    for values in errors:
+        valid = np.isfinite(values) & (values >= 0)
+        rejected |= ~np.isfinite(values)
+        if np.count_nonzero(valid) < 3:
+            continue
+        median = float(np.median(values[valid]))
+        if median > 0:
+            rejected |= valid & (values > factor * median)
+    return [result for result, is_outlier in zip(results, rejected) if is_outlier]
+
+
 _POWER_PATTERN = re.compile(
     r"(?P<power>\d+(?:\.\d+)?)\s*(?P<unit>mW|W)(?:_g2)?(?:_\d{8}_\d{6}(?:_\d{6})?)?$",
     re.IGNORECASE,
