@@ -23,6 +23,7 @@ class MeasurementWorker(QThread):
     measurement_saved = pyqtSignal(str)
     adaptive_plan_changed = pyqtSignal(object)
     filter_prompt = pyqtSignal(float, object)
+    filter_reset_prompt = pyqtSignal(int, object)
     nd_filter_count_changed = pyqtSignal(int)
     run_finished = pyqtSignal(bool, str)
 
@@ -97,6 +98,15 @@ class MeasurementWorker(QThread):
             f"Count rate {count_rate:,.0f} counts/s reached the configured limit."
         )
         return self._wait_for_filter(count_rate)
+
+    def _wait_for_filter_reset(self, initial_count: int) -> bool:
+        decision = {"continue": False}
+        acknowledged = Event()
+        self.filter_reset_prompt.emit(initial_count, (decision, acknowledged))
+        while not acknowledged.wait(0.1):
+            if self._stop_requested.is_set():
+                return False
+        return decision["continue"] and not self._stop_requested.is_set()
 
     def _acquire_block(self, hydra, seconds: float):
         hydra.start(seconds)
@@ -225,6 +235,7 @@ class MeasurementWorker(QThread):
                 max_refinements=self.config.max_refinements,
             )
             nd_filter_count = self.config.initial_nd_filter_count
+            last_requested_power_mw = None
             self.nd_filter_count_changed.emit(nd_filter_count)
             self.adaptive_plan_changed.emit([])
             self.log_message.emit(
@@ -268,6 +279,7 @@ class MeasurementWorker(QThread):
                 saved_path, nd_filter_count, initial_count_rate = self._acquire_power_point(
                     hydra, laser, power_mw, nd_filter_count, "initial"
                 )
+                last_requested_power_mw = float(power_mw)
                 if saved_path is not None:
                     process_saved_point(power_mw, initial_count_rate, saved_path)
                 if self._stop_requested.is_set():
@@ -277,9 +289,27 @@ class MeasurementWorker(QThread):
                 if not self._wait_while_paused():
                     break
                 power_mw = scan.pending_powers_mw[0]
+                if (
+                    last_requested_power_mw is not None
+                    and power_mw < last_requested_power_mw
+                    and nd_filter_count > self.config.initial_nd_filter_count
+                ):
+                    self.log_message.emit(
+                        f"Adaptive point {power_mw:.4f} mW is below the previous "
+                        "power; requesting the initial ND filter count."
+                    )
+                    if not self._wait_for_filter_reset(self.config.initial_nd_filter_count):
+                        self._stop_requested.set()
+                        break
+                    nd_filter_count = self.config.initial_nd_filter_count
+                    self.nd_filter_count_changed.emit(nd_filter_count)
+                    self.log_message.emit(
+                        f"ND filter count reset to {nd_filter_count}."
+                    )
                 saved_path, nd_filter_count, initial_count_rate = self._acquire_power_point(
                     hydra, laser, power_mw, nd_filter_count, "adaptive"
                 )
+                last_requested_power_mw = float(power_mw)
                 if saved_path is not None:
                     process_saved_point(power_mw, initial_count_rate, saved_path)
                 elif self._stop_requested.is_set():

@@ -541,6 +541,7 @@ class MainWindow(QMainWindow):
         self.worker.measurement_saved.connect(self.on_measurement_saved)
         self.worker.adaptive_plan_changed.connect(self.update_adaptive_plan)
         self.worker.filter_prompt.connect(self.handle_filter_prompt)
+        self.worker.filter_reset_prompt.connect(self.handle_filter_reset_prompt)
         self.worker.nd_filter_count_changed.connect(self.update_nd_filter_count)
         self.worker.run_finished.connect(self.on_measurement_run_finished)
         self.worker.finished.connect(self.on_measurement_thread_finished)
@@ -605,6 +606,28 @@ class MainWindow(QMainWindow):
             "The partial histogram will be discarded, the filter count will increase by one, and this power point will restart."
         )
         continue_button = dialog.addButton("Filter added — continue", QMessageBox.ButtonRole.AcceptRole)
+        dialog.addButton("Stop scan", QMessageBox.ButtonRole.RejectRole)
+        dialog.exec()
+        decision["continue"] = dialog.clickedButton() is continue_button
+        acknowledged.set()
+
+    def handle_filter_reset_prompt(self, initial_count, response_state):
+        decision, acknowledged = response_state
+        self.run_status.setText("●  Waiting for ND filter reset")
+        self.run_status.setStyleSheet("color: #9a6516; font-weight: 600")
+        dialog = QMessageBox(self)
+        dialog.setIcon(QMessageBox.Icon.Information)
+        dialog.setWindowTitle("Reset ND filter stack")
+        dialog.setText(
+            "The adaptive scan is returning to a lower laser power after adding filters."
+        )
+        dialog.setInformativeText(
+            f"Remove filters until the setup has its initial count of {initial_count}. "
+            "Confirm only after the optical setup matches that count."
+        )
+        continue_button = dialog.addButton(
+            "Filters reset — continue", QMessageBox.ButtonRole.AcceptRole
+        )
         dialog.addButton("Stop scan", QMessageBox.ButtonRole.RejectRole)
         dialog.exec()
         decision["continue"] = dialog.clickedButton() is continue_button
