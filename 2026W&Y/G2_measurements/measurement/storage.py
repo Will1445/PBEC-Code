@@ -13,6 +13,7 @@ def save_histogram(
     *,
     collection_time_s: float,
     nd_filter_count: int,
+    initial_count_rate_cps: float,
     power_w: float,
     wavelength_nm: int,
     point_type: str = "initial",
@@ -34,6 +35,8 @@ def save_histogram(
         raise ValueError("ND filter count must be a non-negative integer")
     if not np.isfinite(power_w) or power_w < 0 or wavelength_nm <= 0:
         raise ValueError("Power must be non-negative and wavelength must be positive")
+    if not np.isfinite(initial_count_rate_cps) or initial_count_rate_cps < 0:
+        raise ValueError("Initial count rate must be finite and non-negative")
     if point_type not in {"initial", "adaptive"}:
         raise ValueError("Point type must be 'initial' or 'adaptive'")
 
@@ -47,6 +50,7 @@ def save_histogram(
     with csv_path.open("w", encoding="utf-8", newline="") as stream:
         stream.write(f"# collection_time_s={collection_time_s:.10g}\n")
         stream.write(f"# nd_filter_count={nd_filter_count}\n")
+        stream.write(f"# initial_count_rate_cps={initial_count_rate_cps:.10g}\n")
         stream.write(f"# power_W={power_w:.10g}\n")
         stream.write(f"# wavelength_nm={int(wavelength_nm)}\n")
         stream.write(f"# point_type={point_type}\n")

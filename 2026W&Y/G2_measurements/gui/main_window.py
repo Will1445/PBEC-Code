@@ -147,12 +147,14 @@ class MainWindow(QMainWindow):
     def _analysis_parameters(self):
         group = QGroupBox("Adaptive resolution")
         form = QFormLayout(group)
-        self.target_resolution = number_input(0.05, minimum=0.001, maximum=10.0, step=0.01)
+        self.target_resolution = number_input(
+            50_000, minimum=1, maximum=100_000_000, decimals=0, step=10_000
+        )
         self.jump_threshold = number_input(10.0, maximum=100.0, step=0.5)
         self.max_refinements = QSpinBox()
         self.max_refinements.setRange(0, 12)
         self.max_refinements.setValue(3)
-        form.addRow("Target power spacing (mW)", self.target_resolution)
+        form.addRow("Target count-rate spacing (counts/s)", self.target_resolution)
         form.addRow("Change threshold (%)", self.jump_threshold)
         form.addRow("Max refinement levels", self.max_refinements)
         return group
@@ -226,11 +228,11 @@ class MainWindow(QMainWindow):
         plots.setChildrenCollapsible(False)
         peak_box = QGroupBox("Peak height vs power")
         peak_layout = QVBoxLayout(peak_box)
-        self.peak_plot = AnalysisPlot("", "Laser power (mW)", "g²(τ₀)")
+        self.peak_plot = AnalysisPlot("", "Initial count rate (counts/s)", "g²(τ₀)")
         peak_layout.addWidget(self.peak_plot)
         width_box = QGroupBox("Peak width vs power")
         width_layout = QVBoxLayout(width_box)
-        self.width_plot = AnalysisPlot("", "Laser power (mW)", "Width (ns)")
+        self.width_plot = AnalysisPlot("", "Initial count rate (counts/s)", "Width (ns)")
         width_layout.addWidget(self.width_plot)
         plots.addWidget(peak_box)
         plots.addWidget(width_box)
@@ -282,7 +284,7 @@ class MainWindow(QMainWindow):
         self._histogram_fit = None
         self._preferred_histogram_limit_ns = 80.0
         self.analysis_results = []
-        self.pending_adaptive_powers_mw = []
+        self.pending_adaptive_count_rates_cps = []
         self.refresh_saved_measurements()
         return tab
 
@@ -372,6 +374,20 @@ class MainWindow(QMainWindow):
                 self.log_message(f"Analysis skipped {len(failures)} file(s); check the CSV names and data format.")
             return
 
+        missing_rates = [result for result in self.analysis_results if result.count_rate_cps is None]
+        if missing_rates:
+            self.log_message(
+                f"Analysis omitted {len(missing_rates)} legacy measurement(s) without saved initial count rate."
+            )
+        rejected = uncertainty_outliers(
+            result for result in self.analysis_results if result.count_rate_cps is not None
+        )
+        if rejected:
+            names = ", ".join(result.path.name for result in rejected)
+            self.log_message(
+                f"Excluded {len(rejected)} measurement(s) from analysis plots because "
+                f"fit uncertainty exceeded 3× the median: {names}"
+            )
         self._render_analysis_plots()
         rejected = uncertainty_outliers(self.analysis_results)
         if rejected:
@@ -386,33 +402,36 @@ class MainWindow(QMainWindow):
             self.log_message(f"Analysis fitted {len(results)} saved measurement(s).")
 
     def _render_analysis_plots(self):
-        rejected = set(uncertainty_outliers(self.analysis_results))
-        plot_results = [result for result in self.analysis_results if result not in rejected]
+        count_rate_results = [
+            result for result in self.analysis_results if result.count_rate_cps is not None
+        ]
+        rejected = set(uncertainty_outliers(count_rate_results))
+        plot_results = [result for result in count_rate_results if result not in rejected]
         initial = [result for result in plot_results if result.point_type != "adaptive"]
         adaptive = [result for result in plot_results if result.point_type == "adaptive"]
-        pending = self.pending_adaptive_powers_mw
+        pending = self.pending_adaptive_count_rates_cps
 
         self.peak_plot.show_measurement_series(
-            initial_x=[result.power_mw for result in initial],
+            initial_x=[result.count_rate_cps for result in initial],
             initial_y=[result.peak_height for result in initial],
             initial_yerr=[result.peak_height_error for result in initial],
-            adaptive_x=[result.power_mw for result in adaptive],
+            adaptive_x=[result.count_rate_cps for result in adaptive],
             adaptive_y=[result.peak_height for result in adaptive],
             adaptive_yerr=[result.peak_height_error for result in adaptive],
             pending_x=pending,
         )
         self.width_plot.show_measurement_series(
-            initial_x=[result.power_mw for result in initial],
+            initial_x=[result.count_rate_cps for result in initial],
             initial_y=[result.width_ns for result in initial],
             initial_yerr=[result.width_error_ns for result in initial],
-            adaptive_x=[result.power_mw for result in adaptive],
+            adaptive_x=[result.count_rate_cps for result in adaptive],
             adaptive_y=[result.width_ns for result in adaptive],
             adaptive_yerr=[result.width_error_ns for result in adaptive],
             pending_x=pending,
         )
 
-    def update_adaptive_plan(self, pending_powers_mw):
-        self.pending_adaptive_powers_mw = list(pending_powers_mw)
+    def update_adaptive_plan(self, pending_count_rates_cps):
+        self.pending_adaptive_count_rates_cps = list(pending_count_rates_cps)
         self._render_analysis_plots()
 
     def show_selected_histogram(self, current, _previous=None):
@@ -511,7 +530,7 @@ class MainWindow(QMainWindow):
             wavelength_nm=self.wavelength.value(),
             initial_nd_filter_count=self.nd_filter_count.value(),
             saturation_limit_cps=int(self.saturation_limit.value()),
-            target_resolution_mw=self.target_resolution.value(),
+            target_count_rate_spacing_cps=self.target_resolution.value(),
             jump_threshold_percent=self.jump_threshold.value(),
             max_refinements=self.max_refinements.value(),
             output_directory=output_directory,
@@ -538,7 +557,7 @@ class MainWindow(QMainWindow):
         self.current_values["Measurements"].setText("0 completed")
         self.current_values["Fit status"].setText("Waiting")
         self._run_saved_count = 0
-        self.pending_adaptive_powers_mw = []
+        self.pending_adaptive_count_rates_cps = []
         self._render_analysis_plots()
         self.worker.start()
 

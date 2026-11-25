@@ -14,6 +14,7 @@ class HistogramFit:
 
     path: Path
     power_mw: float
+    count_rate_cps: float | None
     background: float
     amplitude: float
     peak_position_ns: float
@@ -163,6 +164,11 @@ def fit_histogram(path: Path, *, max_delay_ns: float = 80.0) -> HistogramFit:
         width_ns=tau_slow / 2.0,
         width_error_ns=float(parameter_errors[3] / 2.0),
         fit_range_ns=max_delay_ns,
-        point_type=load_metadata(path).get("point_type", "initial"),
+        count_rate_cps=(
+            float(metadata["initial_count_rate_cps"])
+            if (metadata := load_metadata(path)).get("initial_count_rate_cps") is not None
+            else None
+        ),
+        point_type=metadata.get("point_type", "initial"),
     )
 

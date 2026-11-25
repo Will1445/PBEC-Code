@@ -14,7 +14,7 @@ class AcquisitionConfig:
     wavelength_nm: int
     initial_nd_filter_count: int
     saturation_limit_cps: int
-    target_resolution_mw: float
+    target_count_rate_spacing_cps: float
     jump_threshold_percent: float
     max_refinements: int
     output_directory: Path

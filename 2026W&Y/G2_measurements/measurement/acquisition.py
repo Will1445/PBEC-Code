@@ -123,14 +123,17 @@ class MeasurementWorker(QThread):
         while count_rate >= self.config.saturation_limit_cps:
             if not self._filter_limit_reached(count_rate):
                 self._stop_requested.set()
-                return None, nd_filter_count
+                return None, nd_filter_count, None
             nd_filter_count += 1
             self.nd_filter_count_changed.emit(nd_filter_count)
             self.log_message.emit(f"ND filter count updated to {nd_filter_count}.")
             time.sleep(0.25)
             count_rate = float(hydra.rates()["input_cps"][self.config.channel])
         if self._stop_requested.is_set():
-            return None, nd_filter_count
+            return None, nd_filter_count, None
+
+        # Preserve the detector rate measured immediately before acquisition.
+        initial_count_rate = count_rate
 
         histogram = np.zeros(hydra.n, dtype=np.uint64)
         elapsed_total = 0.0
@@ -167,12 +170,15 @@ class MeasurementWorker(QThread):
                 self.log_message.emit(
                     f"ND filter count updated to {nd_filter_count}; restarting this power point."
                 )
+                time.sleep(0.25)
+                count_rate = float(hydra.rates()["input_cps"][self.config.channel])
+                initial_count_rate = count_rate
                 histogram.fill(0)
                 elapsed_total = 0.0
                 saturated = False
 
         if elapsed_total <= 0 or saturated:
-            return None, nd_filter_count
+            return None, nd_filter_count, None
 
         resolution_ns = float(hydra.settings["resolution_ps"]) / 1000.0
         delays_ns = np.arange(hydra.n, dtype=float) * resolution_ns
@@ -182,12 +188,13 @@ class MeasurementWorker(QThread):
             histogram,
             collection_time_s=elapsed_total,
             nd_filter_count=nd_filter_count,
+            initial_count_rate_cps=initial_count_rate,
             power_w=power_w,
             wavelength_nm=self.config.wavelength_nm,
             point_type=point_type,
         )
         self.log_message.emit(f"Saved histogram: {saved_path}")
-        return saved_path, nd_filter_count
+        return saved_path, nd_filter_count, initial_count_rate
 
     def run(self):
         hydra = None
@@ -213,7 +220,7 @@ class MeasurementWorker(QThread):
 
             scan = AdaptiveScan(
                 powers_mw,
-                target_spacing_mw=self.config.target_resolution_mw,
+                target_spacing_cps=self.config.target_count_rate_spacing_cps,
                 change_threshold_percent=self.config.jump_threshold_percent,
                 max_refinements=self.config.max_refinements,
             )
@@ -226,7 +233,7 @@ class MeasurementWorker(QThread):
             )
             completed_points = 0
 
-            def process_saved_point(power_mw, saved_path):
+            def process_saved_point(power_mw, initial_count_rate, saved_path):
                 nonlocal completed_points
                 completed_points += 1
                 try:
@@ -237,10 +244,13 @@ class MeasurementWorker(QThread):
                         f"Could not fit {Path(saved_path).name}; no refinement from this point: {exc}"
                     )
                 if fit is None:
-                    new_points = scan.mark_measured(power_mw)
+                    new_points = scan.mark_measured(
+                        power_mw, count_rate_cps=initial_count_rate
+                    )
                 else:
                     new_points = scan.mark_measured(
                         power_mw,
+                        count_rate_cps=initial_count_rate,
                         peak_height=fit.peak_height,
                         width_ns=fit.width_ns,
                     )
@@ -249,17 +259,17 @@ class MeasurementWorker(QThread):
                         "Adaptive powers queued: "
                         + ", ".join(f"{power:.4f} mW" for power in new_points)
                     )
-                self.adaptive_plan_changed.emit(scan.pending_powers_mw)
+                self.adaptive_plan_changed.emit(scan.pending_count_rates_cps)
                 self.measurement_saved.emit(str(saved_path))
 
             for power_mw in powers_mw:
                 if not self._wait_while_paused():
                     break
-                saved_path, nd_filter_count = self._acquire_power_point(
+                saved_path, nd_filter_count, initial_count_rate = self._acquire_power_point(
                     hydra, laser, power_mw, nd_filter_count, "initial"
                 )
                 if saved_path is not None:
-                    process_saved_point(power_mw, saved_path)
+                    process_saved_point(power_mw, initial_count_rate, saved_path)
                 if self._stop_requested.is_set():
                     break
 
@@ -267,16 +277,16 @@ class MeasurementWorker(QThread):
                 if not self._wait_while_paused():
                     break
                 power_mw = scan.pending_powers_mw[0]
-                saved_path, nd_filter_count = self._acquire_power_point(
+                saved_path, nd_filter_count, initial_count_rate = self._acquire_power_point(
                     hydra, laser, power_mw, nd_filter_count, "adaptive"
                 )
                 if saved_path is not None:
-                    process_saved_point(power_mw, saved_path)
+                    process_saved_point(power_mw, initial_count_rate, saved_path)
                 elif self._stop_requested.is_set():
                     break
                 else:
-                    scan.mark_measured(power_mw)
-                    self.adaptive_plan_changed.emit(scan.pending_powers_mw)
+                    scan.mark_measured(power_mw, count_rate_cps=0.0)
+                    self.adaptive_plan_changed.emit(scan.pending_count_rates_cps)
 
             success = not self._stop_requested.is_set()
             summary = (

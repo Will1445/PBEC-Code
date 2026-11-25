@@ -71,13 +71,13 @@ class AnalysisPlot(FigureCanvasQTAgg):
                 color="#27834b", ecolor="#8cc79f", capsize=3, label="Adaptive points",
             )
         if pending_x:
-            for index, power in enumerate(pending_x):
+            for index, count_rate in enumerate(pending_x):
                 self.axes.axvline(
-                    power,
+                    count_rate,
                     color="#d44b4b",
                     linestyle=":",
                     linewidth=1.5,
-                    label="Queued adaptive power" if index == 0 else None,
+                    label="Queued adaptive count rate" if index == 0 else None,
                 )
         if initial_x or adaptive_x or pending_x:
             self.axes.legend()
